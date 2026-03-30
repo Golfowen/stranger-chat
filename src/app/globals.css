@@ -26,6 +26,16 @@
   --surface-hover: #F3F4F6;
   --border-color: #E5E7EB;
   --muted: #9CA3AF;
+  --app-bg: #FFFFFF;
+  --app-text: #111827;
+}
+
+.mori-theme {
+  --app-bg: #11110B;
+  --app-text: #F4EED9;
+  --surface: #1E1C19;
+  --border-color: #383329;
+  --muted: #84796B;
 }
 
 * {
@@ -37,9 +47,9 @@
 *::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
 
 html, body, html body, #__next {
-  background-color: #FFFFFF !important;
+  background-color: var(--app-bg) !important;
   background-image: none !important;
-  background: #FFFFFF !important;
+  background: var(--app-bg) !important;
   box-shadow: none !important;
 }
 
@@ -50,7 +60,7 @@ html::before, html::after, body::before, body::after {
 
 @layer base {
   html {
-    background: #FFFFFF !important;
+    background: var(--app-bg) !important;
     background-image: none !important;
     box-shadow: none !important;
   }
@@ -60,7 +70,7 @@ html::before, html::after, body::before, body::after {
 }
 
 body {
-  color: #111827;
+  color: var(--app-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
 }
@@ -610,3 +620,90 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Background utilities */
 .bg-gradient-main { background: #FFFFFF; }
 .bg-gradient-card { background: #FFFFFF; border-bottom: 1px solid var(--border-color); }
+
+/* ============================================
+   MORI THEME COMPONENTS (Dark Earth Tone)
+   ============================================ */
+
+.mori-card {
+  background-color: #1c1a16;
+  border: 1px solid #3b3324;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  color: #F4EED9;
+}
+
+.mori-input {
+  background-color: #26231d;
+  border: 1px solid #3b3324;
+  color: #F4EED9;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mori-input:focus {
+  border-color: #8B6D3B;
+  box-shadow: 0 0 0 2px rgba(139, 109, 59, 0.2);
+  outline: none;
+}
+
+.mori-btn-primary {
+  background-color: #594A26;
+  color: #F8F3E6;
+  border: 1px solid #8B6D3B;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mori-btn-primary:hover {
+  background-color: #6A582D;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(89, 74, 38, 0.4);
+}
+
+.mori-btn-outline {
+  background-color: transparent;
+  color: #84796B;
+  border: 1px solid #3b3324;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mori-btn-outline:hover {
+  background-color: #26231d;
+  color: #F4EED9;
+  border-color: #594A26;
+}
+
+.mori-leaf {
+  position: absolute;
+  top: -50px;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  animation: fall linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) sepia(0.6) hue-rotate(10deg);
+}
+
+.mori-leaf-bg-svg {
+  /* Using standard shape with currentColor */
+  fill: currentColor;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate3d(80px, 120vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
