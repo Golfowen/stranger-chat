@@ -70,12 +70,20 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       const code = error?.code || '';
+      console.error("Auth Error:", code, error);
+      
       if (code.includes('email-already-in-use')) {
         toast.error(t('errorEmailInUse'));
       } else if (code.includes('weak-password')) {
         toast.error(t('errorWeakPassword'));
       } else if (code.includes('invalid-email')) {
         toast.error(t('errorInvalidEmail'));
+      } else if (isResetPassword) {
+        if (code.includes('user-not-found') || code.includes('invalid-credential')) {
+           toast.error('ไม่พบบัญชีที่ใช้อีเมลนี้');
+        } else {
+           toast.error('เกิดข้อผิดพลาดในการส่งอีเมลรีเซ็ตรหัส');
+        }
       } else {
         toast.error(isRegister ? t('errorRegister') : t('errorLogin'));
       }
