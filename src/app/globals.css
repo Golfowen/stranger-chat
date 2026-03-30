@@ -1,0 +1,612 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #FFFFFF;
+  --color-foreground: #111827;
+  --color-primary: #6366F1;
+  --color-primary-light: #818CF8;
+  --color-primary-dark: #4F46E5;
+  --color-secondary: #EC4899;
+  --color-accent: #6366F1;
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+  --color-surface: #F9FAFB;
+  --color-surface-hover: #F3F4F6;
+  --color-border: #E5E7EB;
+  --color-muted: #9CA3AF;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --surface: #F9FAFB;
+  --surface-hover: #F3F4F6;
+  --border-color: #E5E7EB;
+  --muted: #9CA3AF;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D1D5DB transparent;
+}
+
+*::-webkit-scrollbar { width: 5px; }
+*::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+
+html, body, html body, #__next {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  background: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+html::before, html::after, body::before, body::after {
+  display: none !important;
+  content: none !important;
+}
+
+@layer base {
+  html {
+    background: #FFFFFF !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  html::before, html::after, body::before, body::after {
+    display: none !important;
+  }
+}
+
+body {
+  color: #111827;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* ============================================
+   BUTTONS — with subtle press animations
+   ============================================ */
+
+.btn-primary {
+  background: #111827;
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,255,255,0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.btn-primary:hover {
+  background: #1F2937;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition-duration: 0.1s;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-secondary {
+  background: white;
+  color: #374151;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.btn-danger {
+  background: #EF4444;
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239,68,68,0.25);
+}
+
+.btn-danger:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* ============================================
+   CARDS — smooth hover lift
+   ============================================ */
+
+.glass-card {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: #D1D5DB;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* ============================================
+   INPUT — smooth focus glow
+   ============================================ */
+
+.glass-input {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  color: #111827;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.glass-input:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.06);
+}
+
+.glass-input::placeholder {
+  color: #9CA3AF;
+  transition: opacity 0.2s ease;
+}
+
+.glass-input:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* ============================================
+   TAGS — pop animation on select
+   ============================================ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.tag:active {
+  transform: scale(0.93);
+  transition-duration: 0.08s;
+}
+
+.tag-default {
+  background: #F3F4F6;
+  color: #4B5563;
+  border-color: #E5E7EB;
+}
+
+.tag-default:hover {
+  background: #E5E7EB;
+  transform: translateY(-1px);
+}
+
+.tag-active {
+  background: #111827;
+  color: white;
+  border-color: #111827;
+  animation: tag-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tag-danger {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+.tag-danger.tag-active {
+  background: #EF4444;
+  color: white;
+  border-color: #EF4444;
+}
+
+@keyframes tag-pop {
+  0% { transform: scale(0.85); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   ANIMATIONS — refined & smooth
+   ============================================ */
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bounce-in {
+  0% { opacity: 0; transform: scale(0.9); }
+  60% { transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-glow { animation: pulse-soft 2s ease-in-out infinite; }
+.animate-float { animation: none; }
+.animate-spin-slow { animation: spin-slow 2s linear infinite; }
+.animate-slide-up { animation: slide-up 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.animate-slide-down { animation: slide-down 0.3s ease-out; }
+.animate-fade-in { animation: fade-in 0.25s ease-out; }
+.animate-bounce-in { animation: bounce-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.animate-scale-in { animation: scale-in 0.2s ease-out; }
+
+/* Staggered children animation */
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 40ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 80ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 160ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 200ms; }
+
+.stagger-children > * {
+  animation-fill-mode: backwards;
+}
+
+/* ============================================
+   CHAT BUBBLES — with entrance animation
+   ============================================ */
+
+.chat-bubble-sent {
+  background: #111827;
+  color: white;
+  border-radius: 1.125rem 1.125rem 0.25rem 1.125rem;
+  padding: 0.625rem 0.875rem;
+  max-width: 75%;
+  word-break: break-word;
+  font-size: 0.875rem;
+  animation: msg-in-right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-bubble-received {
+  background: #F3F4F6;
+  color: #111827;
+  border-radius: 1.125rem 1.125rem 1.125rem 0.25rem;
+  padding: 0.625rem 0.875rem;
+  max-width: 75%;
+  word-break: break-word;
+  font-size: 0.875rem;
+  animation: msg-in-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-bubble-system {
+  background: #F9FAFB;
+  color: #9CA3AF;
+  border-radius: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  text-align: center;
+  border: 1px solid #E5E7EB;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes msg-in-right {
+  from { opacity: 0; transform: translateX(12px) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes msg-in-left {
+  from { opacity: 0; transform: translateX(-12px) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* ============================================
+   MATCHING SPINNER — refined
+   ============================================ */
+
+.matching-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #E5E7EB;
+  border-top-color: #111827;
+  animation: spin-slow 1s linear infinite;
+}
+
+.matching-ring-inner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #E5E7EB;
+  border-bottom-color: #6B7280;
+  animation: spin-slow 0.8s linear infinite reverse;
+}
+
+/* ============================================
+   NOTIFICATION BADGE — with pulse
+   ============================================ */
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #EF4444;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  animation: badge-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   MODE SELECTION CARDS — smooth select
+   ============================================ */
+
+.mode-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-card:hover {
+  border-color: #D1D5DB;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
+
+.mode-card:active {
+  transform: translateY(0) scale(0.99);
+  transition-duration: 0.1s;
+}
+
+.mode-card.selected {
+  border-color: #111827 !important;
+  box-shadow: 0 0 0 1px #111827;
+  animation: card-select 0.25s ease-out;
+}
+
+.mode-card::before {
+  display: none;
+}
+
+@keyframes card-select {
+  0% { box-shadow: 0 0 0 0px #111827; }
+  100% { box-shadow: 0 0 0 1px #111827; }
+}
+
+/* ============================================
+   BOTTOM NAVIGATION — with smooth indicator
+   ============================================ */
+
+.bottom-nav {
+  background: white;
+  border-top: 1px solid #E5E7EB;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.5rem;
+  font-size: 0.6rem;
+  color: #9CA3AF;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.9);
+  transition-duration: 0.08s;
+}
+
+.bottom-nav-item.active {
+  color: #111827;
+}
+
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: #111827;
+  border-radius: 0 0 2px 2px;
+  animation: indicator-slide 0.2s ease-out;
+}
+
+@keyframes indicator-slide {
+  from { width: 0; opacity: 0; }
+  to { width: 16px; opacity: 1; }
+}
+
+/* ============================================
+   TYPING ANIMATION — smooth dots
+   ============================================ */
+
+.typing-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9CA3AF;
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* ============================================
+   SKELETON LOADING — shimmer effect
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+/* ============================================
+   SIDEBAR NAV — smooth transitions
+   ============================================ */
+
+.sidebar-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.5rem;
+}
+
+.sidebar-item:hover {
+  background: #F3F4F6;
+  transform: translateX(2px);
+}
+
+.sidebar-item:active {
+  transform: translateX(0) scale(0.98);
+  transition-duration: 0.08s;
+}
+
+.sidebar-item.active {
+  background: #F3F4F6;
+  color: #111827;
+  font-weight: 500;
+}
+
+/* ============================================
+   GOOGLE LOGIN BUTTON — hover shine
+   ============================================ */
+
+.btn-google {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-google::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-google:hover::before {
+  left: 120%;
+}
+
+/* ============================================
+   FOCUS VISIBLE — subtle ring
+   ============================================ */
+
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Background utilities */
+.bg-gradient-main { background: #FFFFFF; }
+.bg-gradient-card { background: #FFFFFF; border-bottom: 1px solid var(--border-color); }
