@@ -14,8 +14,10 @@ import {
   getUserProfile,
   blockUser,
 } from '@/lib/firestore';
+import { uploadChatFile } from '@/lib/storage';
+import { useWebRTC } from '@/hooks/useWebRTC';
 import UserAvatar from '@/components/UserAvatar';
-import { Send, ArrowLeft, Flag, Ban, Eye, X, MoreVertical } from 'lucide-react';
+import { Send, ArrowLeft, Flag, Ban, Eye, X, MoreVertical, Paperclip, File, Download, Video, Phone, PhoneCall, PhoneOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Message {
@@ -23,6 +25,8 @@ interface Message {
   senderId: string;
   text: string;
   type: string;
+  fileUrl?: string;
+  fileName?: string;
   createdAt: any;
 }
 
@@ -49,8 +53,15 @@ export default function ChatPage() {
   const [partnerProfile, setPartnerProfile] = useState<any>(null);
   const [messageInput, setMessageInput] = useState('');
   const [showMenu, setShowMenu] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const {
+     localVideoRef, remoteVideoRef, callStatus, callType, callerId, 
+     startCall, answerCall, hangup 
+  } = useWebRTC(chatId, user?.uid || '');
 
   const partnerId = chatData?.members?.find((id: string) => id !== user?.uid) || '';
   const isAnonymous = chatData?.mode === 'anonymous' && !chatData?.revealed;
@@ -93,14 +104,41 @@ export default function ChatPage() {
   }, [user, chatId]);
 
   const handleSend = async () => {
-    if (!messageInput.trim() || !user || !isActive) return;
+    if ((!messageInput.trim() && !isUploading) || !user || !isActive) return;
     const text = messageInput.trim();
+    if (!text) return; // if it's strictly empty and we are uploading, we wait.
+    
     setMessageInput('');
     setTyping(chatId, user.uid, false);
     try {
       await sendMessage(chatId, user.uid, text);
     } catch (error) {
       toast.error(t('errorGeneral'));
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0 || !user || !chatId) return;
+    const file = e.target.files[0];
+    
+    // Check size limit (e.g., 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+       toast.error('File size must be less than 5MB');
+       return;
+    }
+
+    try {
+      setIsUploading(true);
+      const { url } = await uploadChatFile(chatId, file, user.uid);
+      
+      const type = file.type.startsWith('image/') ? 'image' : 'file';
+      
+      await sendMessage(chatId, user.uid, file.name, { url, type, filename: file.name });
+    } catch (error) {
+       toast.error('Failed to upload file');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -177,6 +215,24 @@ export default function ChatPage() {
             )
           )}
         </div>
+
+        {/* Call Buttons */}
+        {isActive && !isAnonymous && (
+          <div className="flex items-center gap-1 mr-1">
+            <button
+               onClick={() => startCall(false)}
+               className="p-2 text-[#84796B] hover:text-[#8B6D3B] transition-colors rounded-lg hover:bg-[#26231d]"
+            >
+               <Phone size={18} />
+            </button>
+            <button
+               onClick={() => startCall(true)}
+               className="p-2 text-[#84796B] hover:text-[#8B6D3B] transition-colors rounded-lg hover:bg-[#26231d]"
+            >
+               <Video size={18} />
+            </button>
+          </div>
+        )}
 
         {/* Menu */}
         <div className="relative">
@@ -264,7 +320,17 @@ export default function ChatPage() {
             <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'} animate-fade-in`}>
               <div className="flex flex-col gap-0.5 max-w-[75%]">
                 <div className={isMine ? 'chat-bubble-sent' : 'chat-bubble-received'}>
-                  {msg.text}
+                  {msg.type === 'image' && msg.fileUrl ? (
+                    <img src={msg.fileUrl} alt="attachment" className="rounded-lg max-w-full h-auto mb-1 max-h-48 object-cover" />
+                  ) : msg.type === 'file' && msg.fileUrl ? (
+                    <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 bg-black/10 rounded-lg text-sm underline hover:bg-black/20 transition-colors">
+                      <File size={16} />
+                      <span className="truncate max-w-[150px]">{msg.fileName || 'Download File'}</span>
+                      <Download size={14} />
+                    </a>
+                  ) : (
+                    msg.text
+                  )}
                 </div>
                 <span className={`text-[10px] text-[#84796B] ${isMine ? 'text-right' : 'text-left'}`}>
                   {formatTime(msg.createdAt)}
@@ -304,6 +370,20 @@ export default function ChatPage() {
       {isActive && (
         <div className="px-4 py-3 bg-[#1c1a16] border-t border-[#383329] flex-shrink-0 relative z-10 w-full mb-12 sm:mb-0">
           <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
+            <input 
+               type="file" 
+               ref={fileInputRef} 
+               className="hidden" 
+               onChange={handleFileUpload} 
+               accept="image/*,.pdf,.doc,.docx,.zip,.txt" 
+            />
+            <button
+               onClick={() => fileInputRef.current?.click()}
+               disabled={isUploading}
+               className="text-[#84796B] hover:text-[#F4EED9] p-2 transition-colors disabled:opacity-50"
+            >
+               <Paperclip size={20} />
+            </button>
             <input
               type="text"
               value={messageInput}
@@ -317,7 +397,7 @@ export default function ChatPage() {
             />
             <button
               onClick={handleSend}
-              disabled={!messageInput.trim()}
+              disabled={(!messageInput.trim() && !isUploading)}
               className="mori-btn-primary p-3 rounded-full disabled:opacity-30 flex-shrink-0"
             >
               <Send size={18} />
@@ -329,6 +409,74 @@ export default function ChatPage() {
       {showMenu && (
         <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
       )}
+
+      {/* Incoming Call Overlay */}
+      {callStatus === 'ringing' && callerId !== user?.uid && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in px-4">
+          <div className="bg-[#1c1a16] border border-[#3b3324] rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-20 h-20 rounded-full bg-[#8B6D3B]/20 mx-auto flex items-center justify-center mb-4 animate-pulse">
+               {callType === 'video' ? <Video size={36} className="text-[#8B6D3B]" /> : <PhoneCall size={36} className="text-[#8B6D3B]" />}
+            </div>
+            <h3 className="text-xl font-medium text-[#F4EED9] mb-1">
+               Incoming {callType === 'video' ? 'Video' : 'Audio'} Call
+            </h3>
+            <p className="text-[#84796B] mb-8">{partnerProfile?.displayName || t('stranger')} is calling</p>
+            
+            <div className="flex justify-center gap-6">
+               <button onClick={hangup} className="w-14 h-14 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500/30 flex items-center justify-center transition-colors">
+                 <PhoneOff size={24} />
+               </button>
+               <button onClick={answerCall} className="w-14 h-14 rounded-full bg-green-500/20 text-green-500 hover:bg-green-500/30 flex items-center justify-center transition-colors">
+                 <Phone size={24} />
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Active Call Overlay */}
+      {(callStatus === 'connected' || (callStatus === 'ringing' && callerId === user?.uid)) && (
+         <div className="fixed inset-0 z-50 bg-[#11110B] flex flex-col animate-fade-in pb-12 md:pb-0">
+            {/* Header */}
+            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 bg-gradient-to-b from-black/80 to-transparent">
+              <span className="text-sm font-medium text-[#F4EED9]">
+                 {callStatus === 'ringing' ? 'Calling...' : `00:00 (Connected)`}
+              </span>
+            </div>
+
+            {/* Video Streams */}
+            <div className="relative flex-1 flex items-center justify-center">
+               <video 
+                 ref={remoteVideoRef} 
+                 autoPlay playsInline 
+                 className={`w-full h-full object-cover ${callType === 'audio' ? 'hidden' : ''}`} 
+               />
+               
+               {/* Audio Visualizer (Placeholder for audio calls) */}
+               {callType === 'audio' && (
+                  <div className="w-32 h-32 rounded-full bg-[#1c1a16] border border-[#3b3324] flex items-center justify-center animate-pulse">
+                     <UserAvatar name={partnerProfile?.displayName} photoURL={partnerProfile?.photoURL} size="lg" />
+                  </div>
+               )}
+
+               {/* Local video thumbnail */}
+               <div className={`absolute bottom-6 right-6 w-32 md:w-48 aspect-[3/4] bg-[#1c1a16] border-2 border-[#8B6D3B] rounded-xl overflow-hidden shadow-xl z-20 ${callType === 'audio' ? 'hidden' : ''}`}>
+                 <video ref={localVideoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+               </div>
+            </div>
+
+            {/* Controls */}
+            <div className="p-6 md:p-8 flex justify-center gap-6 bg-gradient-to-t from-[#11110B] via-[#11110B] to-transparent z-10">
+                <button className="w-14 h-14 rounded-full bg-[#1c1a16] border border-[#3b3324] text-[#84796B] hover:text-[#F4EED9] hover:border-[#8B6D3B] flex items-center justify-center transition-all">
+                  <File size={24} />{/* Placeholder mute button */}
+                </button>
+                <button onClick={hangup} className="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition-colors">
+                  <PhoneOff size={28} />
+                </button>
+            </div>
+         </div>
+      )}
+
     </div>
   );
 }

@@ -34,6 +34,8 @@ export const translations = {
     resetPassword: 'Reset Password',
     resetPasswordSent: 'Password reset email sent!',
     orContinueWith: 'or continue with',
+    loginStart: 'Start',
+    randomSignUp: 'Random Name / Sign Up',
     
     // Navigation
     home: 'Home',
@@ -178,6 +180,8 @@ export const translations = {
     resetPassword: 'รีเซ็ตรหัสผ่าน',
     resetPasswordSent: 'ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว!',
     orContinueWith: 'หรือเข้าสู่ระบบด้วย',
+    loginStart: 'เริ่มต้น (Start)',
+    randomSignUp: 'สุ่มชื่อให้ฉัน / สมัครใหม่',
     
     // Navigation
     home: 'หน้าหลัก',

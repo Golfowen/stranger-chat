@@ -90,17 +90,30 @@ export async function findMatch(
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
         if (data.userId !== currentUserId) {
+          const targetInterests = data.interests || [];
           const commonInterests = interests.filter((i) =>
-            data.interests?.includes(i)
+            targetInterests.includes(i)
           );
-          const score = commonInterests.length;
-          if (score > bestScore || (score === bestScore && Math.random() > 0.5)) {
-            bestScore = score;
-            bestMatch = {
-              id: docSnap.id,
-              userId: data.userId,
-              interests: data.interests || [],
-            };
+          
+          let score = 0;
+
+          // Wildcard matching: If either has 0 interests, they match instantly with highest score.
+          if (interests.length === 0 || targetInterests.length === 0) {
+            score = 999;
+          } else {
+            score = commonInterests.length;
+          }
+
+          // A valid match is either a wildcard OR they share at least one interest.
+          if (score > 0) {
+            if (score > bestScore || (score === bestScore && Math.random() > 0.5)) {
+              bestScore = score;
+              bestMatch = {
+                id: docSnap.id,
+                userId: data.userId,
+                interests: targetInterests,
+              };
+            }
           }
         }
       });
@@ -175,15 +188,23 @@ export function listenToWaitingQueue(
 export async function sendMessage(
   chatId: string,
   senderId: string,
-  text: string
+  text: string,
+  attachment?: { url: string; type: 'image' | 'file'; filename: string }
 ) {
   try {
-    const msgRef = await addDoc(collection(db, 'chats', chatId, 'messages'), {
+    const messageData: any = {
       senderId,
       text,
-      type: 'text',
+      type: attachment ? attachment.type : 'text',
       createdAt: serverTimestamp(),
-    });
+    };
+    
+    if (attachment) {
+      messageData.fileUrl = attachment.url;
+      messageData.fileName = attachment.filename;
+    }
+
+    const msgRef = await addDoc(collection(db, 'chats', chatId, 'messages'), messageData);
 
     await updateDoc(doc(db, 'chats', chatId), {
       lastMessage: {

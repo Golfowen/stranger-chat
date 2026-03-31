@@ -273,14 +273,14 @@ export default function LoginPage() {
                 ? t('resetPassword')
                 : isRegister
                 ? t('signUp')
-                : 'เริ่มต้น (Start)'}
+                : t('loginStart')}
             </button>
             <button
               type="button"
               onClick={() => { setIsRegister(!isRegister); setIsResetPassword(false); }}
               className={`w-full py-3.5 mt-3 rounded-lg text-sm font-medium tracking-wide mori-btn-outline ${isResetPassword ? 'hidden' : 'block'}`}
             >
-              {isRegister ? t('haveAccount') : 'สุ่มชื่อให้ฉัน / สมัครใหม่'}
+              {isRegister ? t('haveAccount') : t('randomSignUp')}
             </button>
           </div>
         </form>

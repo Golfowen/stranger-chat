@@ -48,10 +48,6 @@ export default function HomePage() {
 
   const startMatching = useCallback(async () => {
     if (!user) return;
-    if (selectedTags.length === 0) {
-      toast.error(t('selectInterests'));
-      return;
-    }
 
     setIsMatching(true);
 
