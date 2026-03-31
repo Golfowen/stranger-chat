@@ -181,7 +181,7 @@ export const translations = {
     resetPasswordSent: 'ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว!',
     orContinueWith: 'หรือเข้าสู่ระบบด้วย',
     loginStart: 'เริ่มต้น (Start)',
-    randomSignUp: 'สุ่มชื่อให้ฉัน / สมัครใหม่',
+    randomSignUp: 'สมัครใหม่',
     
     // Navigation
     home: 'หน้าหลัก',
