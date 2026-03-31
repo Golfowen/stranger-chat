@@ -17,7 +17,7 @@ import {
 import { uploadChatFile } from '@/lib/storage';
 import { useWebRTC } from '@/hooks/useWebRTC';
 import UserAvatar from '@/components/UserAvatar';
-import { Send, ArrowLeft, Flag, Ban, Eye, X, MoreVertical, Paperclip, File, Download, Video, Phone, PhoneCall, PhoneOff } from 'lucide-react';
+import { Send, ArrowLeft, Flag, Ban, Eye, X, MoreVertical, Paperclip, File, Download, Video, VideoOff, Phone, PhoneCall, PhoneOff, Mic, MicOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Message {
@@ -59,8 +59,9 @@ export default function ChatPage() {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
-     localVideoRef, remoteVideoRef, callStatus, callType, callerId, 
-     startCall, answerCall, hangup 
+    localVideoRef, remoteVideoRef, callStatus, callType, callerId, 
+    isMuted, isVideoEnabled, formattedTimer,
+    startCall, answerCall, toggleAudio, toggleVideo, hangup 
   } = useWebRTC(chatId, user?.uid || '');
 
   const partnerId = chatData?.members?.find((id: string) => id !== user?.uid) || '';
@@ -440,7 +441,7 @@ export default function ChatPage() {
             {/* Header */}
             <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 bg-gradient-to-b from-black/80 to-transparent">
               <span className="text-sm font-medium text-[#F4EED9]">
-                 {callStatus === 'ringing' ? 'Calling...' : `00:00 (Connected)`}
+                 {callStatus === 'ringing' ? 'Calling...' : `${formattedTimer} (Connected)`}
               </span>
             </div>
 
@@ -467,9 +468,20 @@ export default function ChatPage() {
 
             {/* Controls */}
             <div className="p-6 md:p-8 flex justify-center gap-6 bg-gradient-to-t from-[#11110B] via-[#11110B] to-transparent z-10">
-                <button className="w-14 h-14 rounded-full bg-[#1c1a16] border border-[#3b3324] text-[#84796B] hover:text-[#F4EED9] hover:border-[#8B6D3B] flex items-center justify-center transition-all">
-                  <File size={24} />{/* Placeholder mute button */}
+                <button 
+                  onClick={toggleAudio}
+                  className={`w-14 h-14 rounded-full border border-[#3b3324] flex items-center justify-center transition-all ${isMuted ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-[#1c1a16] text-[#84796B] hover:text-[#F4EED9] hover:border-[#8B6D3B]'}`}
+                >
+                  {isMuted ? <MicOff size={24} /> : <Mic size={24} />}
                 </button>
+                {callType === 'video' && (
+                  <button 
+                    onClick={toggleVideo}
+                    className={`w-14 h-14 rounded-full border border-[#3b3324] flex items-center justify-center transition-all ${!isVideoEnabled ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-[#1c1a16] text-[#84796B] hover:text-[#F4EED9] hover:border-[#8B6D3B]'}`}
+                  >
+                    {!isVideoEnabled ? <VideoOff size={24} /> : <Video size={24} />}
+                  </button>
+                )}
                 <button onClick={hangup} className="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition-colors">
                   <PhoneOff size={28} />
                 </button>

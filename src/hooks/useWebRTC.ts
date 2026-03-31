@@ -19,9 +19,33 @@ export function useWebRTC(chatId: string, currentUserId: string) {
   const [callStatus, setCallStatus] = useState<'idle' | 'ringing' | 'connected' | 'ended'>('idle');
   const [callType, setCallType] = useState<'audio' | 'video' | null>(null);
   const [callerId, setCallerId] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const [callTimer, setCallTimer] = useState(0);
+
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Timer logic
+  useEffect(() => {
+    if (callStatus === 'connected') {
+      const interval = setInterval(() => {
+        setCallTimer((prev) => prev + 1);
+      }, 1000);
+      timerRef.current = interval;
+      return () => clearInterval(interval);
+    } else {
+      setCallTimer(0);
+    }
+  }, [callStatus]);
+
+  const formattedTimer = () => {
+    const mins = Math.floor(callTimer / 60);
+    const secs = callTimer % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   // Listen for incoming calls
   useEffect(() => {
@@ -66,8 +90,30 @@ export function useWebRTC(chatId: string, currentUserId: string) {
       audio: true,
     });
     setLocalStream(stream);
+    setIsVideoEnabled(isVideo);
+    setIsMuted(false);
     if (localVideoRef.current) localVideoRef.current.srcObject = stream;
     return stream;
+  };
+
+  const toggleAudio = () => {
+    if (localStream) {
+      const audioTrack = localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        setIsMuted(!audioTrack.enabled);
+      }
+    }
+  };
+
+  const toggleVideo = () => {
+    if (localStream && callType === 'video') {
+      const videoTrack = localStream.getVideoTracks()[0];
+      if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        setIsVideoEnabled(videoTrack.enabled);
+      }
+    }
   };
 
   const startCall = async (isVideo: boolean) => {
@@ -199,8 +245,13 @@ export function useWebRTC(chatId: string, currentUserId: string) {
     callStatus,
     callType,
     callerId,
+    isMuted,
+    isVideoEnabled,
+    formattedTimer: formattedTimer(),
     startCall,
     answerCall,
+    toggleAudio,
+    toggleVideo,
     hangup
   };
 }
