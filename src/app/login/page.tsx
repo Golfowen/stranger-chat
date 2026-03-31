@@ -139,9 +139,9 @@ export default function LoginPage() {
 
       {/* Hero Branding */}
       <div className={`text-center mb-8 relative z-10 animate-bounce-in ${playfair.className}`}>
-        <h1 className="text-5xl font-semibold mb-3 flex items-center justify-center gap-3 tracking-wide" style={{ color: '#F4EED9' }}>
-          <Leaf className="text-[#8B6D3B]" size={36} fill="currentColor" strokeWidth={1} />
-          Whisper
+        <h1 className="text-4xl font-semibold mb-3 flex items-center justify-center gap-3 tracking-wide" style={{ color: '#F4EED9' }}>
+          <Leaf className="text-[#8B6D3B]" size={32} fill="currentColor" strokeWidth={1} />
+          StrangerChat
         </h1>
         <p className="text-[#84796B] font-sans text-xs tracking-[0.2em] font-medium uppercase mt-2">
           {t('appTagline')}

@@ -242,33 +242,34 @@ body {
 }
 
 .tag-default {
-  background: #F3F4F6;
-  color: #4B5563;
-  border-color: #E5E7EB;
+  background: #26231d;
+  color: #84796B;
+  border-color: #3b3324;
 }
 
 .tag-default:hover {
-  background: #E5E7EB;
+  background: #3b3324;
+  color: #F4EED9;
   transform: translateY(-1px);
 }
 
 .tag-active {
-  background: #111827;
-  color: white;
-  border-color: #111827;
+  background: #8B6D3B;
+  color: #11110B;
+  border-color: #8B6D3B;
   animation: tag-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tag-danger {
-  background: #FEE2E2;
-  color: #DC2626;
-  border-color: #FECACA;
+  background: rgba(220, 38, 38, 0.1);
+  color: #EF4444;
+  border-color: rgba(220, 38, 38, 0.2);
 }
 
 .tag-danger.tag-active {
-  background: #EF4444;
-  color: white;
-  border-color: #EF4444;
+  background: #DC2626;
+  color: #F4EED9;
+  border-color: #DC2626;
 }
 
 @keyframes tag-pop {
@@ -348,8 +349,8 @@ body {
    ============================================ */
 
 .chat-bubble-sent {
-  background: #111827;
-  color: white;
+  background: #3b3324;
+  color: #F4EED9;
   border-radius: 1.125rem 1.125rem 0.25rem 1.125rem;
   padding: 0.625rem 0.875rem;
   max-width: 75%;
@@ -359,8 +360,8 @@ body {
 }
 
 .chat-bubble-received {
-  background: #F3F4F6;
-  color: #111827;
+  background: #26231d;
+  color: #F4EED9;
   border-radius: 1.125rem 1.125rem 1.125rem 0.25rem;
   padding: 0.625rem 0.875rem;
   max-width: 75%;
@@ -370,13 +371,13 @@ body {
 }
 
 .chat-bubble-system {
-  background: #F9FAFB;
-  color: #9CA3AF;
+  background: #26231d;
+  color: #84796B;
   border-radius: 1rem;
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
   text-align: center;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #3b3324;
   animation: fade-in 0.3s ease;
 }
 
@@ -398,8 +399,8 @@ body {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 2px solid #E5E7EB;
-  border-top-color: #111827;
+  border: 2px solid #3b3324;
+  border-top-color: #8B6D3B;
   animation: spin-slow 1s linear infinite;
 }
 
@@ -407,8 +408,8 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 2px solid #E5E7EB;
-  border-bottom-color: #6B7280;
+  border: 2px solid #3b3324;
+  border-bottom-color: #F4EED9;
   animation: spin-slow 0.8s linear infinite reverse;
 }
 
@@ -463,8 +464,9 @@ body {
 }
 
 .mode-card.selected {
-  border-color: #111827 !important;
-  box-shadow: 0 0 0 1px #111827;
+  border-color: #8B6D3B !important;
+  box-shadow: 0 0 0 1px #8B6D3B;
+  background-color: #26231d;
   animation: card-select 0.25s ease-out;
 }
 
@@ -473,8 +475,8 @@ body {
 }
 
 @keyframes card-select {
-  0% { box-shadow: 0 0 0 0px #111827; }
-  100% { box-shadow: 0 0 0 1px #111827; }
+  0% { box-shadow: 0 0 0 0px #8B6D3B; }
+  100% { box-shadow: 0 0 0 1px #8B6D3B; }
 }
 
 /* ============================================
@@ -482,8 +484,8 @@ body {
    ============================================ */
 
 .bottom-nav {
-  background: white;
-  border-top: 1px solid #E5E7EB;
+  background: #1c1a16;
+  border-top: 1px solid #3b3324;
 }
 
 .bottom-nav-item {
@@ -493,7 +495,7 @@ body {
   gap: 0.15rem;
   padding: 0.5rem;
   font-size: 0.6rem;
-  color: #9CA3AF;
+  color: #84796B;
   transition: all 0.2s ease;
   position: relative;
 }
@@ -515,7 +517,7 @@ body {
   transform: translateX(-50%);
   width: 16px;
   height: 2px;
-  background: #111827;
+  background: #8B6D3B;
   border-radius: 0 0 2px 2px;
   animation: indicator-slide 0.2s ease-out;
 }
@@ -552,7 +554,7 @@ body {
    ============================================ */
 
 .skeleton {
-  background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+  background: linear-gradient(90deg, #26231d 25%, #383329 50%, #26231d 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 0.5rem;
@@ -568,7 +570,8 @@ body {
 }
 
 .sidebar-item:hover {
-  background: #F3F4F6;
+  background: #26231d;
+  color: #F4EED9;
   transform: translateX(2px);
 }
 
@@ -578,8 +581,8 @@ body {
 }
 
 .sidebar-item.active {
-  background: #F3F4F6;
-  color: #111827;
+  background: #26231d;
+  color: #8B6D3B;
   font-weight: 500;
 }
 
@@ -612,7 +615,7 @@ body {
    ============================================ */
 
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
-  outline: 2px solid #111827;
+  outline: 2px solid #8B6D3B;
   outline-offset: 2px;
   border-radius: 0.5rem;
 }

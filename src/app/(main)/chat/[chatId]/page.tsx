@@ -151,10 +151,10 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-5rem)] md:h-[calc(100vh-2rem)] -mx-4 md:-mx-6 -mt-4 md:-mt-6 animate-fade-in">
+    <div className="flex flex-col h-[calc(100vh-5rem)] md:h-[calc(100vh-2rem)] -mx-4 md:-mx-6 -mt-4 md:-mt-6 animate-fade-in bg-[#11110B]">
       {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 flex-shrink-0">
-        <button onClick={() => router.push('/home')} className="text-gray-400 hover:text-gray-900 transition-colors">
+      <div className="bg-[#1c1a16] border-b border-[#3b3324] px-4 py-3 flex items-center gap-3 flex-shrink-0 z-10 relative shadow-sm">
+        <button onClick={() => router.push('/home')} className="text-[#84796B] hover:text-[#F4EED9] transition-colors">
           <ArrowLeft size={20} />
         </button>
 
@@ -166,14 +166,14 @@ export default function ChatPage() {
         />
 
         <div className="flex-1 min-w-0">
-          <h2 className="font-medium text-sm text-gray-900 truncate">
+          <h2 className="font-medium text-sm text-[#F4EED9] truncate">
             {isAnonymous ? t('stranger') : (partnerProfile?.displayName || t('stranger'))}
           </h2>
           {partnerTyping ? (
-            <span className="text-xs text-blue-500">{t('typing')}</span>
+            <span className="text-xs text-[#8B6D3B]">{t('typing')}</span>
           ) : (
             !isAnonymous && partnerProfile?.bio && (
-              <p className="text-xs text-gray-400 truncate">{partnerProfile.bio}</p>
+              <p className="text-xs text-[#84796B] truncate">{partnerProfile.bio}</p>
             )
           )}
         </div>
@@ -182,32 +182,32 @@ export default function ChatPage() {
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2 text-gray-400 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-100"
+            className="p-2 text-[#84796B] hover:text-[#F4EED9] transition-colors rounded-lg hover:bg-[#26231d]"
           >
             <MoreVertical size={18} />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 top-12 w-44 bg-white rounded-lg border border-gray-200 py-1 z-50 shadow-lg animate-slide-up">
+            <div className="absolute right-0 top-12 w-44 bg-[#1c1a16] rounded-lg border border-[#383329] py-1 z-50 shadow-lg animate-slide-up">
               {isAnonymous && isActive && (
                 <button
                   onClick={() => { handleReveal(); setShowMenu(false); }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#F4EED9] hover:bg-[#26231d] transition-colors"
                 >
-                  <Eye size={15} className="text-gray-400" />
+                  <Eye size={15} className="text-[#84796B]" />
                   {t('revealIdentity')}
                 </button>
               )}
               <button
                 onClick={() => { handleBlock(); setShowMenu(false); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#F4EED9] hover:bg-[#26231d] transition-colors"
               >
                 <Ban size={15} className="text-orange-400" />
                 {t('blockUser')}
               </button>
               <button
                 onClick={() => { toast.success(t('reportUser')); setShowMenu(false); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#F4EED9] hover:bg-[#26231d] transition-colors"
               >
                 <Flag size={15} className="text-red-400" />
                 {t('reportUser')}
@@ -215,7 +215,7 @@ export default function ChatPage() {
               {isActive && (
                 <button
                   onClick={() => { handleEndChat(); setShowMenu(false); }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-[#26231d] transition-colors"
                 >
                   <X size={15} />
                   {t('endChat')}
@@ -249,7 +249,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[#11110B]">
         {messages.map((msg) => {
           if (msg.type === 'system') {
             return (
@@ -266,7 +266,7 @@ export default function ChatPage() {
                 <div className={isMine ? 'chat-bubble-sent' : 'chat-bubble-received'}>
                   {msg.text}
                 </div>
-                <span className={`text-[10px] text-gray-400 ${isMine ? 'text-right' : 'text-left'}`}>
+                <span className={`text-[10px] text-[#84796B] ${isMine ? 'text-right' : 'text-left'}`}>
                   {formatTime(msg.createdAt)}
                 </span>
               </div>
@@ -289,11 +289,11 @@ export default function ChatPage() {
 
       {/* Chat ended */}
       {!isActive && (
-        <div className="px-4 py-3 bg-white border-t border-gray-200 text-center text-sm text-gray-500">
+        <div className="px-4 py-3 bg-[#1c1a16] border-t border-[#383329] text-center text-sm text-[#84796B]">
           <p className="mb-2">{t('chatEnded')}</p>
           <button
             onClick={() => router.push('/home')}
-            className="btn-primary px-6 py-2 text-sm"
+            className="mori-btn-primary rounded-lg px-6 py-2 text-sm"
           >
             {t('findAnother')}
           </button>
@@ -302,8 +302,8 @@ export default function ChatPage() {
 
       {/* Message Input */}
       {isActive && (
-        <div className="px-4 py-3 bg-white border-t border-gray-200 flex-shrink-0">
-          <div className="flex items-center gap-2">
+        <div className="px-4 py-3 bg-[#1c1a16] border-t border-[#383329] flex-shrink-0 relative z-10 w-full mb-12 sm:mb-0">
+          <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
             <input
               type="text"
               value={messageInput}
@@ -313,14 +313,14 @@ export default function ChatPage() {
               }}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder={t('typeMessage')}
-              className="glass-input flex-1"
+              className="mori-input w-full px-4 py-3 rounded-full flex-1"
             />
             <button
               onClick={handleSend}
               disabled={!messageInput.trim()}
-              className="btn-primary p-2.5 rounded-lg disabled:opacity-30"
+              className="mori-btn-primary p-3 rounded-full disabled:opacity-30 flex-shrink-0"
             >
-              <Send size={16} />
+              <Send size={18} />
             </button>
           </div>
         </div>

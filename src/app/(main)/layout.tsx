@@ -21,7 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mori-theme min-h-screen text-[#F4EED9]" style={{ backgroundColor: '#11110B' }}>
       <Sidebar />
       <main className="md:ml-56 pb-20 md:pb-4 min-h-screen">
         <div className="max-w-3xl mx-auto p-4 md:p-6">

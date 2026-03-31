@@ -6,7 +6,7 @@ export default function MatchingAnimation({ onCancel }: { onCancel: () => void }
   const { t } = useLanguage();
 
   return (
-    <div className="fixed inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+    <div className="fixed inset-0 bg-[#11110B]/95 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
       <div className="flex flex-col items-center gap-6 p-8">
         {/* Spinner */}
         <div className="relative flex items-center justify-center">
@@ -19,7 +19,7 @@ export default function MatchingAnimation({ onCancel }: { onCancel: () => void }
 
         {/* Text */}
         <div className="text-center space-y-2">
-          <h3 className="text-lg font-medium text-gray-900">{t('matching')}</h3>
+          <h3 className="text-lg font-medium text-[#F4EED9]">{t('matching')}</h3>
           <div className="flex items-center justify-center gap-1">
             <div className="typing-dot" />
             <div className="typing-dot" />
@@ -30,7 +30,7 @@ export default function MatchingAnimation({ onCancel }: { onCancel: () => void }
         {/* Cancel button */}
         <button
           onClick={onCancel}
-          className="btn-secondary px-6 py-2 text-sm"
+          className="mori-btn-outline rounded-lg px-6 py-2.5 text-sm"
         >
           {t('stopMatching')}
         </button>

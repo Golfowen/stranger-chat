@@ -49,11 +49,11 @@ export default function NotificationsPage() {
   const getNotifIcon = (type: string) => {
     switch (type) {
       case 'match_found':
-        return <MessageCircle size={18} className="text-green-600" />;
+        return <MessageCircle size={18} className="text-[#8B6D3B]" />;
       case 'reveal_request':
-        return <Eye size={18} className="text-gray-600" />;
+        return <Eye size={18} className="text-[#84796B]" />;
       default:
-        return <Info size={18} className="text-gray-500" />;
+        return <Info size={18} className="text-[#84796B]" />;
     }
   };
 
@@ -75,13 +75,13 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="space-y-4 animate-slide-up max-w-2xl mx-auto">
+    <div className="space-y-4 animate-slide-up max-w-2xl mx-auto pb-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold text-gray-900">{t('notifications')}</h1>
+          <h1 className="text-xl font-semibold text-[#F4EED9]">{t('notifications')}</h1>
           {unreadCount > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600">
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-900/40 text-red-400">
               {unreadCount}
             </span>
           )}
@@ -89,7 +89,7 @@ export default function NotificationsPage() {
         {unreadCount > 0 && (
           <button
             onClick={handleMarkAllRead}
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#84796B] hover:text-[#F4EED9] transition-colors"
           >
             <CheckCheck size={16} />
             {t('markAllRead')}
@@ -99,9 +99,9 @@ export default function NotificationsPage() {
 
       {/* List */}
       {notifications.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <Bell size={40} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-400 text-sm">{t('noNotifications')}</p>
+        <div className="mori-card p-12 text-center">
+          <Bell size={40} className="text-[#3b3324] mx-auto mb-3" />
+          <p className="text-[#84796B] text-sm">{t('noNotifications')}</p>
         </div>
       ) : (
         <div className="space-y-1">
@@ -109,27 +109,27 @@ export default function NotificationsPage() {
             <button
               key={notif.id}
               onClick={() => handleNotifClick(notif)}
-              className={`w-full glass-card p-4 flex items-start gap-3 text-left transition-all
-                ${!notif.read ? 'bg-gray-50 border-gray-300' : 'opacity-60'}`}
+              className={`w-full mori-card p-4 flex items-start gap-3 text-left transition-all
+                ${!notif.read ? 'bg-[#26231d] border-[#8B6D3B]' : 'opacity-60'}`}
             >
-              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-[#26231d] flex items-center justify-center flex-shrink-0">
                 {getNotifIcon(notif.type)}
               </div>
               <div className="flex-1 min-w-0">
-                <p className={`text-sm ${!notif.read ? 'font-medium text-gray-900' : 'text-gray-600'}`}>
+                <p className={`text-sm ${!notif.read ? 'font-medium text-[#F4EED9]' : 'text-[#84796B]'}`}>
                   {notif.message}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-gray-400">{formatTime(notif.createdAt)}</span>
+                  <span className="text-xs text-[#84796B]">{formatTime(notif.createdAt)}</span>
                   {notif.mode && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-[#84796B]">
                       {notif.mode === 'anonymous' ? '🎭' : '👤'} {notif.mode}
                     </span>
                   )}
                 </div>
               </div>
               {!notif.read && (
-                <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-2" />
+                <div className="w-2 h-2 rounded-full bg-[#8B6D3B] flex-shrink-0 mt-2" />
               )}
             </button>
           ))}

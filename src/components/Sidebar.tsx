@@ -3,9 +3,12 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, User, Bell, Clock, Settings, LogOut, Globe } from 'lucide-react';
+import { Home, User, Bell, Clock, Settings, LogOut, Globe, Leaf } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Playfair_Display } from 'next/font/google';
 import { listenToNotifications } from '@/lib/firestore';
+
+const playfair = Playfair_Display({ subsets: ['latin'], style: ['normal'] });
 
 const navItems = [
   { key: 'home' as const, icon: Home, href: '/home' },
@@ -41,17 +44,20 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="hidden md:flex flex-col w-56 h-screen fixed left-0 top-0 bg-white border-r border-gray-200 p-3">
+    <aside className="hidden md:flex flex-col w-56 h-screen fixed left-0 top-0 mori-card rounded-none border-y-0 border-l-0 p-3 z-50">
       {/* Logo */}
       <div className="px-3 py-4 mb-2">
-        <h1 className="text-lg font-semibold text-gray-900">{t('appName')}</h1>
+        <h1 className={`text-2xl font-semibold flex items-center gap-2 text-[#F4EED9] ${playfair.className}`}>
+          <Leaf size={24} className="text-[#8B6D3B]" />
+          StrangerChat
+        </h1>
       </div>
 
       {/* User info */}
       {userProfile && (
-        <div className="px-3 py-3 mb-4 rounded-lg bg-gray-50 border border-gray-100">
-          <p className="font-medium text-sm text-gray-900 truncate">{userProfile.displayName}</p>
-          <p className="text-xs text-muted truncate">{userProfile.email}</p>
+        <div className="px-3 py-3 mb-4 rounded-lg bg-[#26231d] border border-[#383329]">
+          <p className="font-medium text-sm text-[#F4EED9] truncate">{userProfile.displayName}</p>
+          <p className="text-xs text-[#84796B] truncate">{userProfile.email}</p>
         </div>
       )}
 
@@ -65,10 +71,10 @@ export default function Sidebar() {
             <button
               key={item.key}
               onClick={() => router.push(item.href)}
-              className={`sidebar-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
+              className={`sidebar-item w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors
                 ${isActive
-                  ? 'active bg-gray-100 text-gray-900'
-                  : 'text-gray-500 hover:text-gray-900'
+                  ? 'bg-[#26231d] text-[#8B6D3B]'
+                  : 'text-[#84796B] hover:text-[#F4EED9] hover:bg-[#1E1C19]'
                 }`}
             >
               <div className="relative">
@@ -86,17 +92,17 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom actions */}
-      <div className="space-y-1 border-t border-gray-200 pt-3 mt-3">
+      <div className="space-y-1 border-t border-[#383329] pt-3 mt-3">
         <button
           onClick={() => setLocale(locale === 'en' ? 'th' : 'en')}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-[#84796B] hover:text-[#F4EED9] hover:bg-[#26231d] transition-all"
         >
           <Globe size={16} />
           {locale === 'en' ? '🇹🇭 ภาษาไทย' : '🇬🇧 English'}
         </button>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-red-400 hover:bg-neutral-800 transition-all"
         >
           <LogOut size={16} />
           {t('logout')}

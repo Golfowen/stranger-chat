@@ -45,18 +45,18 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="space-y-4 animate-slide-up max-w-2xl mx-auto">
-      <h1 className="text-xl font-semibold text-gray-900">{t('chatHistory')}</h1>
+    <div className="space-y-4 animate-slide-up max-w-2xl mx-auto pb-10">
+      <h1 className="text-xl font-semibold text-[#F4EED9]">{t('chatHistory')}</h1>
 
       {loading ? (
-        <div className="glass-card p-12 text-center">
+        <div className="mori-card p-12 text-center">
           <div className="matching-ring mx-auto mb-4" style={{ width: 32, height: 32 }} />
-          <p className="text-gray-400 text-sm">{t('loading')}</p>
+          <p className="text-[#84796B] text-sm">{t('loading')}</p>
         </div>
       ) : chats.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <Clock size={40} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-400 text-sm">{t('noChatHistory')}</p>
+        <div className="mori-card p-12 text-center">
+          <Clock size={40} className="text-[#3b3324] mx-auto mb-3" />
+          <p className="text-[#84796B] text-sm">{t('noChatHistory')}</p>
         </div>
       ) : (
         <div className="space-y-1">
@@ -68,22 +68,22 @@ export default function HistoryPage() {
               <button
                 key={chat.id}
                 onClick={() => router.push(`/chat/${chat.id}`)}
-                className="w-full glass-card p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-all"
+                className="w-full mori-card p-4 flex items-center gap-3 text-left hover:bg-[#26231d] transition-all"
               >
                 <UserAvatar name={partnerId} anonymous={isAnonymous} size="md" />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-gray-900">
+                    <span className="font-medium text-sm text-[#F4EED9]">
                       {t('stranger')}
                     </span>
-                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                    <span className="text-xs text-[#84796B] flex items-center gap-1">
                       {isAnonymous ? <EyeOff size={11} /> : <Eye size={11} />}
                       {isAnonymous ? t('anonymousMode') : t('revealedMode')}
                     </span>
                   </div>
                   {chat.lastMessage && (
-                    <p className="text-xs text-gray-400 truncate mt-0.5">
+                    <p className="text-xs text-[#84796B] truncate mt-0.5">
                       {chat.lastMessage.senderId === user?.uid ? `${t('you')}: ` : ''}
                       {chat.lastMessage.text}
                     </p>
@@ -91,8 +91,8 @@ export default function HistoryPage() {
                 </div>
 
                 <div className="text-right flex-shrink-0">
-                  <p className="text-xs text-gray-400">{formatDate(chat.createdAt)}</p>
-                  <span className={`inline-block w-2 h-2 rounded-full mt-1 ${chat.isActive ? 'bg-green-500' : 'bg-gray-300'}`} />
+                  <p className="text-xs text-[#84796B]">{formatDate(chat.createdAt)}</p>
+                  <span className={`inline-block w-2 h-2 rounded-full mt-1 ${chat.isActive ? 'bg-green-500' : 'bg-[#3b3324]'}`} />
                 </div>
               </button>
             );

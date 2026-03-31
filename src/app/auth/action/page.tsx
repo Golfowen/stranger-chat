@@ -5,8 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { verifyPasswordResetCode, confirmPasswordReset } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Lock, Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
+import { Lock, Eye, EyeOff, Loader2, CheckCircle2, Leaf } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({ subsets: ['latin'], style: ['normal', 'italic'] });
 
 function AuthActionContent() {
   const { t } = useLanguage();
@@ -76,19 +79,22 @@ function AuthActionContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-white">
-      <div className="w-full max-w-sm animate-bounce-in">
+    <div className="mori-theme min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden text-[#F4EED9]" style={{ backgroundColor: '#11110B' }}>
+      <div className="w-full max-w-sm animate-bounce-in relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {t('appName')}
+        <div className={`text-center mb-8 ${playfair.className}`}>
+          <h1 className="text-4xl font-semibold mb-3 flex items-center justify-center gap-3 tracking-wide" style={{ color: '#F4EED9' }}>
+            <Leaf className="text-[#8B6D3B]" size={32} fill="currentColor" strokeWidth={1} />
+            StrangerChat
           </h1>
-          <p className="text-muted text-sm mt-1">รีเซ็ตรหัสผ่านของคุณ</p>
+          <p className="text-[#84796B] font-sans text-xs tracking-[0.2em] font-medium uppercase mt-2">
+            รีเซ็ตรหัสผ่านของคุณ
+          </p>
         </div>
 
         {/* Dynamic Content based on Status */}
-        <div className="glass-card p-6 animate-slide-up">
+        <div className="mori-card p-8 animate-slide-up">
           
           {status === 'verifying' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
@@ -106,10 +112,10 @@ function AuthActionContent() {
                   <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
               </div>
-              <p className="text-sm font-medium text-gray-900">{errorMessage}</p>
+              <p className="text-sm font-medium text-[#F4EED9]">{errorMessage}</p>
               <button 
                 onClick={() => router.push('/login')}
-                className="btn-primary w-full py-2.5 mt-4 text-sm"
+                className="mori-btn-primary w-full py-3.5 rounded-lg mt-4 text-sm font-medium tracking-wide"
               >
                 กลับไปหน้าเข้าสู่ระบบ
               </button>
@@ -128,14 +134,14 @@ function AuthActionContent() {
 
           {status === 'ready' && (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="text-center mb-4 pb-4 border-b border-gray-100">
-                <p className="text-xs text-gray-500 mb-1">กำลังตั้งรหัสผ่านใหม่ให้กับ</p>
-                <p className="text-sm font-medium text-gray-900">{email}</p>
+              <div className="text-center mb-6 pb-4 border-b border-[#3b3324]">
+                <p className="text-xs text-[#84796B] mb-2 uppercase tracking-wide">กำลังตั้งรหัสผ่านใหม่ให้กับ</p>
+                <p className="text-sm font-medium text-[#F4EED9]">{email}</p>
               </div>
 
               <div>
-                <label className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-1.5">
-                  <Lock size={14} />
+                <label className="flex items-center gap-2 text-xs font-medium text-[#84796B] mb-2">
+                  <Lock size={14} className="text-[#8B6D3B]" />
                   รหัสผ่านใหม่
                 </label>
                 <div className="relative">
@@ -144,27 +150,29 @@ function AuthActionContent() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="glass-input pr-10"
+                    className="w-full px-4 py-3 rounded-lg mori-input text-sm pr-10"
                     required
                     minLength={6}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#84796B] hover:text-[#F4EED9] transition-colors"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={submitting || newPassword.length < 6}
-                className="btn-primary w-full py-2.5 mt-2 text-center"
-              >
-                {submitting ? t('loading') : 'บันทึกรหัสผ่านใหม่'}
-              </button>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={submitting || newPassword.length < 6}
+                  className="mori-btn-primary w-full py-3.5 rounded-lg mt-2 text-sm font-medium tracking-wide"
+                >
+                  {submitting ? t('loading') : 'บันทึกรหัสผ่านใหม่'}
+                </button>
+              </div>
             </form>
           )}
 
@@ -177,8 +185,8 @@ function AuthActionContent() {
 export default function AuthActionPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center p-4 bg-white">
-        <Loader2 size={32} className="animate-spin text-gray-400" />
+      <div className="mori-theme min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#11110B' }}>
+        <Loader2 size={32} className="animate-spin text-[#8B6D3B]" />
       </div>
     }>
       <AuthActionContent />

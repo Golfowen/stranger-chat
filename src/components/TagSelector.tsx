@@ -118,13 +118,13 @@ export default function TagSelector({ selectedTags, onTagsChange, userAge }: Tag
           onChange={(e) => setCustomTagInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addCustomTag()}
           placeholder={t('customTag')}
-          className="glass-input flex-1 text-sm"
+          className="mori-input rounded-lg px-4 py-2 flex-1 text-sm"
           maxLength={20}
         />
         <button
           onClick={addCustomTag}
           disabled={!customTagInput.trim()}
-          className="btn-secondary px-3 py-2 text-sm flex items-center gap-1 disabled:opacity-30"
+          className="mori-btn-outline rounded-lg px-4 py-2 text-sm flex items-center gap-1 disabled:opacity-30"
         >
           <Plus size={16} />
           {t('addTag')}
