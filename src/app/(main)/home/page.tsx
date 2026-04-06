@@ -71,6 +71,15 @@ export default function HomePage() {
     }
   }, [queueDocId]);
 
+  // Cleanup queue on unmount
+  useEffect(() => {
+    return () => {
+      if (queueDocId) {
+        leaveWaitingQueue(queueDocId).catch(() => {});
+      }
+    };
+  }, [queueDocId]);
+
   return (
     <div className="space-y-5 stagger-children max-w-2xl mx-auto">
       {/* Header */}
@@ -143,7 +152,7 @@ export default function HomePage() {
       {/* Start Matching Button */}
       <button
         onClick={startMatching}
-        disabled={selectedTags.length === 0 || isMatching}
+        disabled={isMatching}
         className="mori-btn-primary rounded-lg w-full py-3 text-sm flex items-center justify-center gap-2"
       >
         <Users size={18} />

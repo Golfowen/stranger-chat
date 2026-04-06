@@ -94,9 +94,9 @@ export default function LoginPage() {
         toast.error(t('errorInvalidEmail'));
       } else if (isResetPassword) {
         if (code.includes('user-not-found') || code.includes('invalid-credential')) {
-           toast.error('ไม่พบบัญชีที่ใช้อีเมลนี้');
+           toast.error(t('emailNotFound'));
         } else {
-           toast.error('เกิดข้อผิดพลาดในการส่งอีเมลรีเซ็ตรหัส');
+           toast.error(t('resetEmailError'));
         }
       } else {
         toast.error(isRegister ? t('errorRegister') : t('errorLogin'));
@@ -152,9 +152,9 @@ export default function LoginPage() {
       <div className="w-full max-w-sm mori-card p-8 relative z-10 animate-slide-up">
         {/* Card Header */}
         <div className="mb-6 border-b border-[#3b3324] pb-4">
-          <h2 className={`text-2xl font-semibold mb-2 ${playfair.className}`}>Welcome</h2>
+          <h2 className={`text-2xl font-semibold mb-2 ${playfair.className}`}>{t('welcomeTitle')}</h2>
           <p className="text-[#84796B] text-sm tracking-wide">
-            {isResetPassword ? 'รีเซ็ตรหัสผ่านของคุณ' : (isRegister ? 'สร้างบัญชีเพื่อเริ่มต้นสนทนา' : 'เข้าสู่ระบบเพื่อเริ่มต้นสนทนา')}
+            {isResetPassword ? t('resetSubtitle') : (isRegister ? t('registerSubtitle') : t('loginSubtitle'))}
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export default function LoginPage() {
         {/* Divider */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex-1 h-px bg-[#3b3324]" />
-          <span className="text-xs text-[#84796B] uppercase tracking-wider">หรือ</span>
+          <span className="text-xs text-[#84796B] uppercase tracking-wider">{t('or')}</span>
           <div className="flex-1 h-px bg-[#3b3324]" />
         </div>
 
@@ -192,7 +192,7 @@ export default function LoginPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="เช่น Autumn, Sage, Mori..."
+                placeholder={t('namePlaceholder')}
                 className="w-full px-4 py-3 rounded-lg mori-input text-sm"
                 required
               />
@@ -300,15 +300,15 @@ export default function LoginPage() {
       <div className="mt-12 flex items-center justify-center gap-10 relative z-10 opacity-80 animate-slide-up" style={{ animationDelay: '0.2s' }}>
         <div className="flex flex-col items-center gap-2">
           <Leaf size={18} className="text-[#8B6D3B]" />
-          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">ไม่ระบุตัวตน</span>
+          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">{t('anonymous')}</span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <Zap size={18} className="text-[#8B6D3B]" />
-          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">หาคู่คุยทันที</span>
+          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">{t('instantMatch')}</span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <Lock size={18} className="text-[#8B6D3B]" />
-          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">ปลอดภัย</span>
+          <span className="text-[10px] text-[#84796B] tracking-wider uppercase">{t('safe')}</span>
         </div>
       </div>
 

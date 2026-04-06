@@ -14,6 +14,8 @@ import {
   onSnapshot,
   serverTimestamp,
   runTransaction,
+  arrayUnion,
+  arrayRemove,
   Timestamp,
   Unsubscribe,
 } from 'firebase/firestore';
@@ -277,16 +279,10 @@ export async function endChat(chatId: string) {
 export async function setTyping(chatId: string, userId: string, isTyping: boolean) {
   try {
     const chatRef = doc(db, 'chats', chatId);
-    const chatSnap = await getDoc(chatRef);
-    if (chatSnap.exists()) {
-      const data = chatSnap.data();
-      let typingUsers: string[] = data.typingUsers || [];
-      if (isTyping && !typingUsers.includes(userId)) {
-        typingUsers = [...typingUsers, userId];
-      } else if (!isTyping) {
-        typingUsers = typingUsers.filter((id: string) => id !== userId);
-      }
-      await updateDoc(chatRef, { typingUsers });
+    if (isTyping) {
+      await updateDoc(chatRef, { typingUsers: arrayUnion(userId) });
+    } else {
+      await updateDoc(chatRef, { typingUsers: arrayRemove(userId) });
     }
   } catch {
     // Silently ignore typing errors

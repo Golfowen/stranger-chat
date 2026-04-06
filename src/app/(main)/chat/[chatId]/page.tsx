@@ -185,9 +185,23 @@ export default function ChatPage() {
 
   const formatTime = (timestamp: any) => {
     if (!timestamp) return '';
-    const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    try {
+      const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return '';
+    }
   };
+
+  // Loading state
+  if (!chatData) {
+    return (
+      <div className="flex flex-col h-[calc(100vh-5rem)] md:h-[calc(100vh-2rem)] -mx-4 md:-mx-6 -mt-4 md:-mt-6 bg-[#11110B] items-center justify-center">
+        <div className="matching-ring mx-auto mb-4" style={{ width: 32, height: 32 }} />
+        <p className="text-[#84796B] text-sm">{t('loading')}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] md:h-[calc(100vh-2rem)] -mx-4 md:-mx-6 -mt-4 md:-mt-6 animate-fade-in bg-[#11110B]">
@@ -285,14 +299,14 @@ export default function ChatPage() {
 
       {/* Reveal banner */}
       {chatData?.revealRequests?.length === 1 && !chatData?.revealed && (
-        <div className="bg-blue-50 border-b border-blue-100 px-4 py-2 text-center text-sm">
+        <div className="bg-[#26231d] border-b border-[#3b3324] px-4 py-2.5 text-center text-sm">
           {chatData.revealRequests.includes(user?.uid || '')
-            ? <span className="text-blue-600">✨ {t('revealIdentity')} — waiting for partner...</span>
+            ? <span className="text-[#8B6D3B]">✨ {t('revealIdentity')} — waiting for partner...</span>
             : (
               <div className="flex items-center justify-center gap-3">
-                <span className="text-blue-600">{t('stranger')} {t('revealRequest')}</span>
-                <button onClick={handleReveal} className="btn-primary px-3 py-1 text-xs">{t('accept')}</button>
-                <button className="btn-secondary px-3 py-1 text-xs">{t('decline')}</button>
+                <span className="text-[#8B6D3B]">{t('stranger')} {t('revealRequest')}</span>
+                <button onClick={handleReveal} className="mori-btn-primary px-3 py-1.5 text-xs rounded-lg">{t('accept')}</button>
+                <button className="mori-btn-outline px-3 py-1.5 text-xs rounded-lg">{t('decline')}</button>
               </div>
             )
           }
@@ -300,7 +314,7 @@ export default function ChatPage() {
       )}
 
       {chatData?.revealed && (
-        <div className="bg-green-50 border-b border-green-100 px-4 py-2 text-center text-sm text-green-600">
+        <div className="bg-[#26231d] border-b border-[#3b3324] px-4 py-2.5 text-center text-sm text-[#8B6D3B]">
           ✨ {t('bothRevealed')}
         </div>
       )}
@@ -370,6 +384,11 @@ export default function ChatPage() {
       {/* Message Input */}
       {isActive && (
         <div className="px-4 py-3 bg-[#1c1a16] border-t border-[#383329] flex-shrink-0 relative z-10 w-full mb-12 sm:mb-0">
+          {isUploading && (
+            <div className="absolute top-0 left-0 right-0">
+              <div className="h-0.5 bg-[#8B6D3B] animate-pulse rounded-full" />
+            </div>
+          )}
           <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
             <input 
                type="file" 
@@ -383,7 +402,11 @@ export default function ChatPage() {
                disabled={isUploading}
                className="text-[#84796B] hover:text-[#F4EED9] p-2 transition-colors disabled:opacity-50"
             >
-               <Paperclip size={20} />
+               {isUploading ? (
+                 <div className="w-5 h-5 border-2 border-[#8B6D3B] border-t-transparent rounded-full animate-spin" />
+               ) : (
+                 <Paperclip size={20} />
+               )}
             </button>
             <input
               type="text"
@@ -393,8 +416,9 @@ export default function ChatPage() {
                 handleTyping();
               }}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder={t('typeMessage')}
-              className="mori-input w-full px-4 py-3 rounded-full flex-1"
+              placeholder={isUploading ? 'Uploading...' : t('typeMessage')}
+              disabled={isUploading}
+              className="mori-input w-full px-4 py-3 rounded-full flex-1 disabled:opacity-50"
             />
             <button
               onClick={handleSend}
