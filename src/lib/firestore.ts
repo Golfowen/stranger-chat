@@ -78,6 +78,9 @@ export async function findMatch(
   interests: string[]
 ): Promise<{ chatId: string; partnerId: string } | null> {
   try {
+    // Fetch blocked users to exclude from matching
+    const blockedList = await getBlockedUsers(currentUserId);
+
     const result = await runTransaction(db, async (transaction) => {
       const q = query(
         collection(db, 'waitingQueue'),
@@ -91,7 +94,8 @@ export async function findMatch(
 
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        if (data.userId !== currentUserId) {
+        // Skip self and blocked users
+        if (data.userId !== currentUserId && !blockedList.includes(data.userId)) {
           const targetInterests = data.interests || [];
           const commonInterests = interests.filter((i) =>
             targetInterests.includes(i)

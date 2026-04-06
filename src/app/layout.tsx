@@ -7,7 +7,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#ffffff",
+  themeColor: "#11110B",
 };
 
 export const metadata: Metadata = {
@@ -58,7 +58,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
-      <body className="min-h-full flex flex-col bg-white antialiased">
+      <body className="min-h-full flex flex-col antialiased" style={{ backgroundColor: '#11110B' }}>
         <Providers>{children}</Providers>
       </body>
     </html>
